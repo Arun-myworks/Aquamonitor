@@ -1,0 +1,28 @@
+ 
+          aquamo_Sim900.callUp(PHONE_NUMBER);                             /* Call */
+          delay(25000);
+          aquamo_Sim900.hangup();                                         /* Hang up the call */
+          datas.messageIndex = aquamo_Sim900.isSMSunread();                     /* Check if new message available */
+          while( (datas.messageIndex < 1) && !strstr( datas.message,"Cool down") )    /* No new unread message */
+              {
+                  if(Status.count == 5)
+                    {
+                      datas.messageIndex = aquamo_Sim900.isSMSunread();
+                      break;
+                    }
+                  Status.count++;
+                  delay(5000);
+                  datas.messageIndex = aquamo_Sim900.isSMSunread();
+              }
+              while(datas.messageIndex > 0 )                                    /* New unread message available */
+              {
+                  aquamo_Sim900.readSMS(datas.messageIndex, datas.message, MESSAGE_LENGTH, datas.phone, datas.datetime);  /* Read message */
+                  if(strstr( datas.message,"Cool down"))
+                    {
+                        memset(datas.message, 0, 160);
+                    }
+                  datas.messageIndex = aquamo_Sim900.isSMSunread();
+              }         
+        delay(10000); 
+ 
+    } 
